@@ -1574,6 +1574,8 @@ const formStatus=document.getElementById('formStatus');
 const successBox=document.getElementById('sbox');
 const successMessage=document.getElementById('successMessage');
 let submissionTimer=null;
+let submissionInProgress=false;
+let responseHandled=false;
 
 function makeSubmissionId(){
   if(window.crypto&&typeof window.crypto.randomUUID==='function')return window.crypto.randomUUID();
@@ -1583,6 +1585,27 @@ function makeSubmissionId(){
 function setFormStatus(message,type=''){
   formStatus.textContent=message;
   formStatus.className='form-status'+(type?' '+type:'');
+}
+
+function showRegistrationSuccess(message){
+  if(responseHandled)return;
+  responseHandled=true;
+  submissionInProgress=false;
+  clearTimeout(submissionTimer);
+  registrationForm.style.display='none';
+  successMessage.textContent=message||'Please check your email for the webinar details and private Google Meet link. Check your spam or junk folder if it does not arrive shortly.';
+  successBox.style.display='block';
+  if(typeof successBox.focus==='function')successBox.focus();
+}
+
+function showRegistrationError(message){
+  if(responseHandled)return;
+  responseHandled=true;
+  submissionInProgress=false;
+  clearTimeout(submissionTimer);
+  submitButton.disabled=false;
+  submitButton.textContent='Reserve my free seat →';
+  setFormStatus(message||'We could not complete your registration. Please check your details and try again.','error');
 }
 
 registrationForm.addEventListener('submit',event=>{
@@ -1601,35 +1624,45 @@ registrationForm.addEventListener('submit',event=>{
   registrationForm.action=APPS_SCRIPT_URL;
   document.getElementById('sourcePage').value=window.location.href;
   document.getElementById('submissionId').value=makeSubmissionId();
+  submissionInProgress=true;
+  responseHandled=false;
   submitButton.disabled=true;
   submitButton.textContent='Saving your seat…';
   setFormStatus('Saving your registration and sending your confirmation email…','loading');
 
   clearTimeout(submissionTimer);
   submissionTimer=setTimeout(()=>{
+    if(!submissionInProgress||responseHandled)return;
+    submissionInProgress=false;
+    responseHandled=true;
     submitButton.disabled=false;
     submitButton.textContent='Reserve my free seat →';
-    setFormStatus('This is taking longer than expected. Please try once more or contact the Atannur team.','error');
-  },20000);
+    setFormStatus('Your registration may already have been completed. Please check your email before submitting again.','error');
+  },45000);
 });
 
 window.addEventListener('message',event=>{
-  const trustedOrigin=event.origin==='https://script.google.com'||event.origin.endsWith('.googleusercontent.com');
-  if(!trustedOrigin||!event.data||event.data.type!=='atannur-registration')return;
+  if(!submissionInProgress||responseHandled)return;
 
-  clearTimeout(submissionTimer);
+  let data=event.data;
+  if(typeof data==='string'){
+    try{data=JSON.parse(data);}catch(error){return;}
+  }
 
-  if(event.data.ok){
-    registrationForm.style.display='none';
-    successMessage.textContent=event.data.message||'Please check your email for the webinar details and private Google Meet link. Check your spam or junk folder if it does not arrive shortly.';
-    successBox.style.display='block';
-    if(typeof successBox.focus==='function')successBox.focus();
+  const trustedOrigin=
+    event.origin==='https://script.google.com'||
+    event.origin==='https://script.googleusercontent.com'||
+    event.origin.endsWith('.googleusercontent.com')||
+    event.origin==='null';
+
+  if(!trustedOrigin||!data||data.type!=='atannur-registration')return;
+
+  if(data.ok){
+    showRegistrationSuccess(data.message);
   }else{
-    submitButton.disabled=false;
-    submitButton.textContent='Reserve my free seat →';
-    setFormStatus(event.data.message||'We could not complete your registration. Please check your details and try again.','error');
+    showRegistrationError(data.message);
   }
 });
 </script>
-<!-- Force GitHub Pages redeploy --></body>
+</body>
 </html>
