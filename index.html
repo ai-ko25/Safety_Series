@@ -1133,6 +1133,94 @@ section[id],div[id]{scroll-margin-top:88px;}
   .nav-cta:hover,.f-btn:hover,.cta-btn:hover,.pill:hover,.ag-card:hover,.emotion-card:hover{transform:none;box-shadow:inherit;}
 }
 
+
+
+/* DIRECT WEBSITE REGISTRATION */
+.registration-form{display:block;}
+.optional-label{
+  display:inline-block;
+  margin-left:5px;
+  color:rgba(58,47,92,.55);
+  font-size:10px;
+  font-weight:500;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+}
+.consent-row{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  margin:2px 0 16px;
+  color:var(--text-soft);
+  font-size:12px;
+  line-height:1.5;
+  cursor:pointer;
+}
+.consent-row input{
+  width:17px;
+  height:17px;
+  margin-top:1px;
+  flex:0 0 17px;
+  accent-color:var(--purple);
+}
+.form-status{
+  min-height:18px;
+  margin-top:10px;
+  text-align:center;
+  color:var(--text-soft);
+  font-size:12px;
+  line-height:1.45;
+}
+.form-status.error{color:#A33A3A;}
+.form-status.loading{color:var(--purple);}
+.f-btn[disabled]{
+  cursor:wait;
+  opacity:.72;
+  transform:none;
+  box-shadow:none;
+}
+.hp-field{
+  position:absolute!important;
+  width:1px!important;
+  height:1px!important;
+  padding:0!important;
+  margin:-1px!important;
+  overflow:hidden!important;
+  clip:rect(0,0,0,0)!important;
+  white-space:nowrap!important;
+  border:0!important;
+}
+.registration-sink{
+  position:absolute;
+  width:1px;
+  height:1px;
+  border:0;
+  opacity:0;
+  pointer-events:none;
+}
+.success-box{
+  display:none;
+  text-align:center;
+  padding:18px 4px 6px;
+}
+.success-icon{
+  width:52px;
+  height:52px;
+  margin:0 auto 14px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--purple-pale);
+  color:var(--purple);
+  border:1px solid var(--purple-soft);
+  font-size:26px;
+  font-weight:700;
+}
+@media(max-width:700px){
+  .consent-row{font-size:12px;}
+}
+
 </style>
 <meta name="description" content="Join Atannur’s free live parent online safety webinar on Sunday, 19 July 2026, from 6:00 to 7:00 PM Qatar time via Google Meet.">
 </head>
@@ -1145,9 +1233,9 @@ section[id],div[id]{scroll-margin-top:88px;}
     <a href="#agenda">What you’ll learn</a>
     <a href="#who">Who it’s for</a>
     <a href="#about-us">Meet the team</a>
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSeej9zaRZqCCc2a5UN8Cggh1qaUiAmV87FENAqgZkEwdBCXEQ/viewform?usp=dialog" target="_blank" rel="noopener noreferrer">Register free</a>
+    <a href="#signup">Register free</a>
   </div>
-  <a href="https://docs.google.com/forms/d/e/1FAIpQLSeej9zaRZqCCc2a5UN8Cggh1qaUiAmV87FENAqgZkEwdBCXEQ/viewform?usp=dialog" target="_blank" rel="noopener noreferrer" class="nav-cta">Reserve my free seat</a>
+  <a href="#signup" class="nav-cta">Reserve my free seat</a>
 </nav>
 
 <!-- HERO -->
@@ -1179,10 +1267,52 @@ section[id],div[id]{scroll-margin-top:88px;}
       </div>
       <div class="form-box" id="signup">
         <p class="form-label">Reserve your free seat</p>
-        <h3 style="font-size:22px;line-height:1.3;color:var(--text);margin-bottom:10px;">Complete the short registration form</h3>
-        <p style="font-size:14px;line-height:1.65;color:var(--text-soft);margin-bottom:18px;">Registration takes less than a minute. After you submit the form, your confirmation and Google Meet link will be sent to the email address you provide.</p>
-        <a class="f-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSeej9zaRZqCCc2a5UN8Cggh1qaUiAmV87FENAqgZkEwdBCXEQ/viewform?usp=dialog" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;justify-content:center;text-decoration:none;">Reserve my free seat →</a>
-        <p class="f-note">Free to attend · Online via Google Meet</p>
+        <h3 style="font-size:22px;line-height:1.3;color:var(--text);margin-bottom:10px;">Register directly on this page</h3>
+        <p style="font-size:14px;line-height:1.65;color:var(--text-soft);margin-bottom:18px;">Registration takes less than a minute. Your details will be saved securely in our registration sheet, and your confirmation email will include the private Google Meet link.</p>
+
+        <form id="registrationForm" class="registration-form" method="post" target="registrationSink">
+          <label class="field-label" for="parentName">Parent or caregiver name</label>
+          <input class="f-input" type="text" id="parentName" name="parentName" placeholder="Your full name" autocomplete="name" maxlength="80" required>
+
+          <label class="field-label" for="email">Email address</label>
+          <input class="f-input" type="email" id="email" name="email" placeholder="your@email.com" autocomplete="email" maxlength="120" required>
+
+          <label class="field-label" for="childAge">Age of your child <span class="optional-label">Optional</span></label>
+          <select class="f-select" id="childAge" name="childAge">
+            <option value="" selected>Prefer not to say</option>
+            <option value="8 years">8 years</option>
+            <option value="9 years">9 years</option>
+            <option value="10 years">10 years</option>
+            <option value="11 years">11 years</option>
+            <option value="12 years">12 years</option>
+            <option value="More than one child aged 8–12">More than one child aged 8–12</option>
+          </select>
+
+          <label class="consent-row">
+            <input type="checkbox" name="consent" value="yes" required>
+            <span>I agree to Atannur using these details only to manage this webinar and send webinar-related emails.</span>
+          </label>
+
+          <div class="hp-field" aria-hidden="true">
+            <label for="website">Leave this field empty</label>
+            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+          </div>
+
+          <input type="hidden" id="sourcePage" name="sourcePage" value="">
+          <input type="hidden" id="submissionId" name="submissionId" value="">
+
+          <button class="f-btn" id="submitButton" type="submit">Reserve my free seat →</button>
+          <p class="f-note">Free to attend · Online via Google Meet · Confirmation emailed automatically</p>
+          <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+        </form>
+
+        <iframe class="registration-sink" id="registrationSink" name="registrationSink" title="Registration response"></iframe>
+
+        <div class="success-box" id="sbox" role="status" aria-live="polite" tabindex="-1">
+          <div class="success-icon" aria-hidden="true">✓</div>
+          <h3>Your free seat is confirmed</h3>
+          <p id="successMessage">Please check your email for the webinar details and private Google Meet link. Check your spam or junk folder if it does not arrive shortly.</p>
+        </div>
       </div>
     </div>
 
@@ -1359,7 +1489,7 @@ section[id],div[id]{scroll-margin-top:88px;}
     <div class="eyebrow" style="justify-content:center;">Parents-only webinar</div>
     <h2 class="cta-h">Join us online on<br><em>19 July 2026</em></h2>
     <p class="cta-sub">The free webinar will run online from 6:00 to 7:00 PM. Complete the short registration form, and the Google Meet link will be emailed to you automatically.</p>
-    <a class="cta-btn cta-link" href="https://docs.google.com/forms/d/e/1FAIpQLSeej9zaRZqCCc2a5UN8Cggh1qaUiAmV87FENAqgZkEwdBCXEQ/viewform?usp=dialog" target="_blank" rel="noopener noreferrer">Register for free →</a>
+    <a class="cta-btn cta-link" href="#signup">Register for free →</a>
     <p class="cta-note" style="margin-top:14px;">Sunday, 19 July 2026 · 6:00–7:00 PM · Online via Google Meet · Free</p>
   </div>
 </section>
@@ -1418,7 +1548,7 @@ section[id],div[id]{scroll-margin-top:88px;}
     <a href="#what">Why it matters</a>
     <a href="#agenda">What you’ll learn</a>
     <a href="#about-us">Meet the team</a>
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSeej9zaRZqCCc2a5UN8Cggh1qaUiAmV87FENAqgZkEwdBCXEQ/viewform?usp=dialog" target="_blank" rel="noopener noreferrer">Register free</a>
+    <a href="#signup">Register free</a>
   </div>
   <p class="foot-note">© 2026 Atannur · Parent Safety Series</p>
 </footer>
@@ -1431,6 +1561,75 @@ if('IntersectionObserver' in window){
 }else{
   reveals.forEach(el=>el.classList.add('on'));
 }
+
+/*
+  After deploying Code.gs as a Google Apps Script web app,
+  replace the placeholder below with the deployment URL ending in /exec.
+*/
+const APPS_SCRIPT_URL='https://script.google.com/macros/s/AKfycbwZXHLcR-uIVKPmQFsDKnMl8sjTr4aVUB90X64sWUed3N1OBKmhqsyucFzzFl-QUdeZeA/exec';
+
+const registrationForm=document.getElementById('registrationForm');
+const submitButton=document.getElementById('submitButton');
+const formStatus=document.getElementById('formStatus');
+const successBox=document.getElementById('sbox');
+const successMessage=document.getElementById('successMessage');
+let submissionTimer=null;
+
+function makeSubmissionId(){
+  if(window.crypto&&typeof window.crypto.randomUUID==='function')return window.crypto.randomUUID();
+  return 'reg-'+Date.now()+'-'+Math.random().toString(16).slice(2);
+}
+
+function setFormStatus(message,type=''){
+  formStatus.textContent=message;
+  formStatus.className='form-status'+(type?' '+type:'');
+}
+
+registrationForm.addEventListener('submit',event=>{
+  if(!registrationForm.checkValidity()){
+    event.preventDefault();
+    registrationForm.reportValidity();
+    return;
+  }
+
+  if(!APPS_SCRIPT_URL.startsWith('https://script.google.com/macros/s/')||!APPS_SCRIPT_URL.endsWith('/exec')){
+    event.preventDefault();
+    setFormStatus('Registration is being configured. Please try again shortly.','error');
+    return;
+  }
+
+  registrationForm.action=APPS_SCRIPT_URL;
+  document.getElementById('sourcePage').value=window.location.href;
+  document.getElementById('submissionId').value=makeSubmissionId();
+  submitButton.disabled=true;
+  submitButton.textContent='Saving your seat…';
+  setFormStatus('Saving your registration and sending your confirmation email…','loading');
+
+  clearTimeout(submissionTimer);
+  submissionTimer=setTimeout(()=>{
+    submitButton.disabled=false;
+    submitButton.textContent='Reserve my free seat →';
+    setFormStatus('This is taking longer than expected. Please try once more or contact the Atannur team.','error');
+  },20000);
+});
+
+window.addEventListener('message',event=>{
+  const trustedOrigin=event.origin==='https://script.google.com'||event.origin.endsWith('.googleusercontent.com');
+  if(!trustedOrigin||!event.data||event.data.type!=='atannur-registration')return;
+
+  clearTimeout(submissionTimer);
+
+  if(event.data.ok){
+    registrationForm.style.display='none';
+    successMessage.textContent=event.data.message||'Please check your email for the webinar details and private Google Meet link. Check your spam or junk folder if it does not arrive shortly.';
+    successBox.style.display='block';
+    if(typeof successBox.focus==='function')successBox.focus();
+  }else{
+    submitButton.disabled=false;
+    submitButton.textContent='Reserve my free seat →';
+    setFormStatus(event.data.message||'We could not complete your registration. Please check your details and try again.','error');
+  }
+});
 </script>
 </body>
 </html>
