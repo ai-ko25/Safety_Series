@@ -1204,52 +1204,7 @@ section[id],div[id]{scroll-margin-top:88px;}
 }
 
 
-/* EMAIL VERIFICATION + DYNAMIC CHILD AGE FIELDS */
-.email-verification-row{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) auto;
-  gap:10px;
-  align-items:start;
-  margin-bottom:2px;
-}
-.email-verification-row .f-input{margin-bottom:10px;}
-.otp-action-btn{
-  min-width:118px;
-  border:1px solid var(--purple-soft);
-  border-radius:12px;
-  padding:14px 16px;
-  background:var(--purple-pale);
-  color:var(--purple);
-  font-family:'Trebuchet MS','Segoe UI',Arial,sans-serif;
-  font-size:13px;
-  font-weight:700;
-  cursor:pointer;
-  white-space:nowrap;
-  transition:all .2s;
-}
-.otp-action-btn:hover{background:#e9e3f5;transform:translateY(-1px);}
-.otp-action-btn:disabled{cursor:wait;opacity:.68;transform:none;}
-.otp-panel{
-  display:none;
-  padding:14px;
-  margin:0 0 14px;
-  border:1px solid rgba(139,130,196,.22);
-  border-radius:14px;
-  background:rgba(243,239,249,.7);
-}
-.otp-panel.visible{display:block;}
-.otp-help{
-  margin:-2px 0 0;
-  color:var(--text-soft);
-  font-size:11px;
-  line-height:1.45;
-}
-.otp-input{
-  letter-spacing:.2em;
-  font-size:18px;
-  font-weight:700;
-  text-align:center;
-}
+/* DYNAMIC CHILD AGE FIELDS */
 .children-ages-container{
   display:grid;
   gap:10px;
@@ -1267,10 +1222,6 @@ section[id],div[id]{scroll-margin-top:88px;}
   color:#A33A3A;
   font-size:10px;
   font-weight:600;
-}
-@media(max-width:700px){
-  .email-verification-row{grid-template-columns:1fr;}
-  .otp-action-btn{width:100%;margin-top:-4px;margin-bottom:8px;}
 }
 
 </style>
@@ -1327,16 +1278,7 @@ section[id],div[id]{scroll-margin-top:88px;}
           <input class="f-input" type="text" id="parentName" name="parentName" placeholder="Your full name" autocomplete="name" maxlength="80" required>
 
           <label class="field-label" for="email">Email address</label>
-          <div class="email-verification-row">
-            <input class="f-input" type="email" id="email" name="email" placeholder="your@email.com" autocomplete="email" maxlength="120" required>
-            <button class="otp-action-btn" id="sendOtpButton" type="button">Send code</button>
-          </div>
-
-          <div class="otp-panel" id="otpPanel">
-            <label class="field-label" for="otpCode">6-digit email verification code</label>
-            <input class="f-input otp-input" type="text" id="otpCode" name="otpCode" placeholder="000000" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}">
-            <p class="otp-help">Enter the code emailed to you. The code expires after 10 minutes.</p>
-          </div>
+          <input class="f-input" type="email" id="email" name="email" placeholder="your@email.com" autocomplete="email" maxlength="120" required>
 
           <label class="field-label" for="numberOfChildren">How many children do you have? <span class="required-note">Required</span></label>
           <select class="f-select" id="numberOfChildren" name="numberOfChildren" required>
@@ -1364,8 +1306,8 @@ section[id],div[id]{scroll-margin-top:88px;}
           <input type="hidden" id="sourcePage" name="sourcePage" value="">
           <input type="hidden" id="submissionId" name="submissionId" value="">
 
-          <button class="f-btn" id="submitButton" type="submit" disabled>Verify email &amp; reserve my free seat →</button>
-          <p class="f-note">Free to attend · Online via Google Meet · Your email must be verified before registration</p>
+          <button class="f-btn" id="submitButton" type="submit">Reserve my free seat →</button>
+          <p class="f-note">Free to attend · Online via Google Meet</p>
           <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
         </form>
 
@@ -1634,9 +1576,6 @@ const APPS_SCRIPT_URL='https://script.google.com/macros/s/AKfycbwZXHLcR-uIVKPmQF
 const registrationForm=document.getElementById('registrationForm');
 const parentNameInput=document.getElementById('parentName');
 const emailInput=document.getElementById('email');
-const sendOtpButton=document.getElementById('sendOtpButton');
-const otpPanel=document.getElementById('otpPanel');
-const otpCodeInput=document.getElementById('otpCode');
 const numberOfChildrenInput=document.getElementById('numberOfChildren');
 const childrenAgesContainer=document.getElementById('childrenAgesContainer');
 const childAgesInput=document.getElementById('childAges');
@@ -1648,12 +1587,9 @@ const formStatus=document.getElementById('formStatus');
 const successBox=document.getElementById('sbox');
 const successMessage=document.getElementById('successMessage');
 
-let activeRequest='';
 let requestPending=false;
 let responseHandled=false;
 let requestTimer=null;
-let resendTimer=null;
-let verifiedCodeEmail='';
 
 function makeSubmissionId(){
   if(window.crypto&&typeof window.crypto.randomUUID==='function'){
@@ -1692,8 +1628,7 @@ function postToAppsScript(fields){
   setTimeout(()=>transport.remove(),1500);
 }
 
-function beginRequest(type,statusMessage){
-  activeRequest=type;
+function beginRequest(statusMessage){
   requestPending=true;
   responseHandled=false;
   setFormStatus(statusMessage,'loading');
@@ -1703,7 +1638,7 @@ function beginRequest(type,statusMessage){
     if(!requestPending||responseHandled)return;
     requestPending=false;
     responseHandled=true;
-    restoreButtons();
+    restoreButton();
     setFormStatus(
       'The request is taking longer than expected. Please check your email before trying again.',
       'error'
@@ -1717,55 +1652,9 @@ function finishRequest(){
   clearTimeout(requestTimer);
 }
 
-function restoreButtons(){
-  if(activeRequest==='sendOtp'){
-    sendOtpButton.disabled=false;
-    sendOtpButton.textContent=verifiedCodeEmail?'Resend code':'Send code';
-  }
-  if(activeRequest==='register'){
-    submitButton.disabled=!verifiedCodeEmail;
-    submitButton.textContent='Verify email & reserve my free seat →';
-  }
-}
-
-function startResendCooldown(seconds=60){
-  clearInterval(resendTimer);
-  let remaining=seconds;
-  sendOtpButton.disabled=true;
-  sendOtpButton.textContent='Resend in '+remaining+'s';
-
-  resendTimer=setInterval(()=>{
-    remaining-=1;
-    if(remaining<=0){
-      clearInterval(resendTimer);
-      sendOtpButton.disabled=false;
-      sendOtpButton.textContent='Resend code';
-      return;
-    }
-    sendOtpButton.textContent='Resend in '+remaining+'s';
-  },1000);
-}
-
-function showOtpPanel(message){
-  verifiedCodeEmail=emailInput.value.trim().toLowerCase();
-  otpPanel.classList.add('visible');
-  otpCodeInput.required=true;
-  otpCodeInput.value='';
+function restoreButton(){
   submitButton.disabled=false;
-  setFormStatus(message||'Verification code sent. Check your inbox and spam folder.');
-  startResendCooldown(60);
-  setTimeout(()=>otpCodeInput.focus(),100);
-}
-
-function resetOtpState(){
-  verifiedCodeEmail='';
-  otpPanel.classList.remove('visible');
-  otpCodeInput.required=false;
-  otpCodeInput.value='';
-  submitButton.disabled=true;
-  clearInterval(resendTimer);
-  sendOtpButton.disabled=false;
-  sendOtpButton.textContent='Send code';
+  submitButton.textContent='Reserve my free seat →';
 }
 
 function showRegistrationSuccess(message){
@@ -1834,41 +1723,6 @@ function collectChildAges(){
 
 numberOfChildrenInput.addEventListener('change',renderChildAgeFields);
 
-emailInput.addEventListener('input',()=>{
-  const currentEmail=emailInput.value.trim().toLowerCase();
-  if(verifiedCodeEmail&&currentEmail!==verifiedCodeEmail){
-    resetOtpState();
-    setFormStatus('The email address changed. Send a new verification code.','error');
-  }
-});
-
-sendOtpButton.addEventListener('click',()=>{
-  if(requestPending)return;
-
-  if(!isAppsScriptConfigured()){
-    setFormStatus('Email verification is being configured. Please try again shortly.','error');
-    return;
-  }
-
-  if(!emailInput.checkValidity()){
-    emailInput.reportValidity();
-    return;
-  }
-
-  const email=emailInput.value.trim().toLowerCase();
-  sendOtpButton.disabled=true;
-  sendOtpButton.textContent='Sending…';
-
-  beginRequest('sendOtp','Sending a verification code to your email…');
-
-  postToAppsScript({
-    action:'sendOtp',
-    email:email,
-    website:websiteInput.value,
-    sourcePage:window.location.href
-  });
-});
-
 registrationForm.addEventListener('submit',event=>{
   event.preventDefault();
   if(requestPending)return;
@@ -1878,24 +1732,8 @@ registrationForm.addEventListener('submit',event=>{
     return;
   }
 
-  const email=emailInput.value.trim().toLowerCase();
-
-  if(!verifiedCodeEmail||email!==verifiedCodeEmail){
-    setFormStatus('Please send a verification code to this email address first.','error');
-    emailInput.focus();
-    return;
-  }
-
   if(!registrationForm.checkValidity()){
     registrationForm.reportValidity();
-    return;
-  }
-
-  const otpCode=otpCodeInput.value.replace(/\D/g,'');
-  if(otpCode.length!==6){
-    otpCodeInput.setCustomValidity('Enter the 6-digit code sent to your email.');
-    otpCodeInput.reportValidity();
-    otpCodeInput.setCustomValidity('');
     return;
   }
 
@@ -1907,20 +1745,21 @@ registrationForm.addEventListener('submit',event=>{
     return;
   }
 
+  const email=emailInput.value.trim().toLowerCase();
+
   childAgesInput.value=JSON.stringify(childAges);
   sourcePageInput.value=window.location.href;
   submissionIdInput.value=makeSubmissionId();
 
   submitButton.disabled=true;
-  submitButton.textContent='Verifying & saving…';
+  submitButton.textContent='Saving your registration…';
 
-  beginRequest('register','Verifying your email and saving your registration…');
+  beginRequest('Saving your registration…');
 
   postToAppsScript({
-    action:'verifyAndRegister',
+    action:'register',
     parentName:parentNameInput.value.trim(),
     email:email,
-    otpCode:otpCode,
     numberOfChildren:numberOfChildrenInput.value,
     childAges:childAgesInput.value,
     website:websiteInput.value,
@@ -1947,19 +1786,14 @@ window.addEventListener('message',event=>{
 
   finishRequest();
 
-  if(data.ok&&data.stage==='otp-sent'){
-    showOtpPanel(data.message);
-    return;
-  }
-
   if(data.ok&&data.stage==='registered'){
     showRegistrationSuccess(data.message);
     return;
   }
 
-  restoreButtons();
+  restoreButton();
   setFormStatus(
-    data.message||'We could not complete your request. Please check your details and try again.',
+    data.message||'We could not complete your registration. Please check your details and try again.',
     'error'
   );
 });
