@@ -1762,6 +1762,76 @@ section[id],div[id]{scroll-margin-top:88px;}
 .founder-card:nth-child(2) .founder-photo img{
   object-position:center 22%;
 }
+
+
+/* SOCIAL LINKS */
+.aiko-social-links{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:22px;
+}
+.social-link{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  min-height:38px;
+  padding:9px 12px;
+  border:1px solid rgba(111,99,173,.18);
+  border-radius:999px;
+  background:rgba(255,255,255,.72);
+  color:#5f5598;
+  font-size:12px;
+  font-weight:700;
+  line-height:1;
+  text-decoration:none;
+  transition:transform .18s ease, border-color .18s ease, background .18s ease;
+}
+.social-link svg{
+  width:16px;
+  height:16px;
+  flex:0 0 auto;
+  fill:currentColor;
+}
+.social-link:hover,
+.social-link:focus-visible{
+  transform:translateY(-1px);
+  border-color:rgba(111,99,173,.38);
+  background:#fff;
+}
+.instagram-link{
+  color:#8a4d79;
+}
+.founder-link{
+  margin-top:9px;
+}
+.founder-link .social-link{
+  min-height:auto;
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  font-size:11px;
+}
+.founder-link .social-link:hover,
+.founder-link .social-link:focus-visible{
+  background:transparent;
+  transform:none;
+  text-decoration:underline;
+}
+.founder-link .social-link svg{
+  width:14px;
+  height:14px;
+}
+@media(max-width:700px){
+  .aiko-social-links{
+    gap:8px;
+    margin-top:18px;
+  }
+  .social-link{
+    padding:9px 11px;
+  }
+}
 </style>
 <meta content="Join Atannur’s free live parent online safety webinar on Sunday, 26 July 2026, from 6:00 to 6:45 PM Qatar time via Google Meet." name="description"/>
 </head>
@@ -1847,7 +1917,15 @@ section[id],div[id]{scroll-margin-top:88px;}
 <p class="cta-note" style="margin-top:14px;">Sunday, 26 July 2026 · 6:00–6:45 PM Qatar time · Online · Free</p>
 </div>
 </section>
-<section class="who-we-are" id="about-us"><div class="founders-inner"><div class="founders-heading reveal"><div class="eyebrow">Who we are</div><h2 class="sec-h">Atannur is the team behind Aiko</h2><p class="sec-sub">We create practical, trust-first online safety experiences that help parents protect their children without making them feel judged or afraid.</p></div><div class="about-two-column"><div class="aiko-intro-card reveal"><h3 class="aiko-card-title">Aiko</h3><h4 class="aiko-card-subtitle">A child-friendly companion for difficult digital conversations</h4><p>Aiko helps children build better online judgment through play, while giving parents practical guidance on what to notice, what to discuss, and how to respond while protecting trust.</p></div><div class="team-box reveal"><div class="team-heading reveal"><h3>Meet the team</h3><p>The webinar is led by Aysha and Soha, the real people building Atannur and shaping Aiko with parents and children in mind.</p></div><div class="founder-grid"><article class="founder-card reveal"><div aria-label="Aysha Jiffry, Co-founder of Atannur" class="founder-photo" data-initials="AJ" role="img"><img alt="Aysha Jiffry, Co-founder of Atannur" decoding="async" loading="lazy" onerror="this.style.display='none';" src="images/aysha-jiffry.webp"/></div><div class="founder-info"><h3>Aysha Jiffry</h3><p class="founder-role">Co-founder, Atannur</p></div></article><article class="founder-card reveal"><div aria-label="Soha Mousa, Co-founder of Atannur" class="founder-photo" data-initials="SM" role="img"><img alt="Soha Mousa, Co-founder of Atannur" decoding="async" loading="lazy" onerror="this.style.display='none';" src="images/soha-mousa.webp"/></div><div class="founder-info"><h3>Soha Mousa</h3><p class="founder-role">Co-founder, Atannur</p></div></article></div></div></div></div></section>
+<section class="who-we-are" id="about-us"><div class="founders-inner"><div class="founders-heading reveal"><div class="eyebrow">Who we are</div><h2 class="sec-h">Atannur is the team behind Aiko</h2><p class="sec-sub">We create practical, trust-first online safety experiences that help parents protect their children without making them feel judged or afraid.</p></div><div class="about-two-column"><div class="aiko-intro-card reveal"><h3 class="aiko-card-title">Aiko</h3><h4 class="aiko-card-subtitle">A child-friendly companion for difficult digital conversations</h4><p>Aiko helps children build better online judgment through play, while giving parents practical guidance on what to notice, what to discuss, and how to respond while protecting trust.</p><div class="aiko-social-links"><a aria-label="Aiko on LinkedIn" class="social-link" href="https://www.linkedin.com/in/ai-ko-581656422?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios" rel="noopener noreferrer" target="_blank"><svg aria-hidden="true" viewbox="0 0 24 24">
+<path d="M5.2 3.5A2.2 2.2 0 1 1 5.2 8a2.2 2.2 0 0 1 0-4.5ZM3.4 9.6H7V21H3.4V9.6Zm5.8 0h3.5v1.6h.1c.5-.9 1.7-2 3.6-2 3.8 0 4.5 2.5 4.5 5.8v6h-3.6v-5.3c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V21H9.2V9.6Z"></path>
+</svg><span>Aiko on LinkedIn</span></a><a aria-label="Aiko on Instagram" class="social-link instagram-link" href="https://www.instagram.com/aikobyatannur?igsh=NHBlaHJ0b3RzdjNw" rel="noopener noreferrer" target="_blank"><svg aria-hidden="true" viewbox="0 0 24 24">
+<path d="M7.3 2h9.4A5.3 5.3 0 0 1 22 7.3v9.4a5.3 5.3 0 0 1-5.3 5.3H7.3A5.3 5.3 0 0 1 2 16.7V7.3A5.3 5.3 0 0 1 7.3 2Zm-.2 2A3.1 3.1 0 0 0 4 7.1v9.8A3.1 3.1 0 0 0 7.1 20h9.8a3.1 3.1 0 0 0 3.1-3.1V7.1A3.1 3.1 0 0 0 16.9 4H7.1Zm10.3 1.5a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4ZM12 7.2A4.8 4.8 0 1 1 12 16.8 4.8 4.8 0 0 1 12 7.2Zm0 2A2.8 2.8 0 1 0 12 14.8 2.8 2.8 0 0 0 12 9.2Z"></path>
+</svg><span>Aiko on Instagram</span></a></div></div><div class="team-box reveal"><div class="team-heading reveal"><h3>Meet the team</h3><p>The webinar is led by Aysha and Soha, the real people building Atannur and shaping Aiko with parents and children in mind.</p></div><div class="founder-grid"><article class="founder-card reveal"><div aria-label="Aysha Jiffry, Co-founder of Atannur" class="founder-photo" data-initials="AJ" role="img"><img alt="Aysha Jiffry, Co-founder of Atannur" decoding="async" loading="lazy" onerror="this.style.display='none';" src="images/aysha-jiffry.webp"/></div><div class="founder-info"><h3>Aysha Jiffry</h3><p class="founder-role">Co-founder, Atannur</p><div class="founder-link"><a aria-label="Aysha Jiffry on LinkedIn" class="social-link founder-link-button" href="https://www.linkedin.com/in/aysha-jiffry/" rel="noopener noreferrer" target="_blank"><svg aria-hidden="true" viewbox="0 0 24 24">
+<path d="M5.2 3.5A2.2 2.2 0 1 1 5.2 8a2.2 2.2 0 0 1 0-4.5ZM3.4 9.6H7V21H3.4V9.6Zm5.8 0h3.5v1.6h.1c.5-.9 1.7-2 3.6-2 3.8 0 4.5 2.5 4.5 5.8v6h-3.6v-5.3c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V21H9.2V9.6Z"></path>
+</svg><span>Aysha Jiffry on LinkedIn</span></a></div></div></article><article class="founder-card reveal"><div aria-label="Soha Mousa, Co-founder of Atannur" class="founder-photo" data-initials="SM" role="img"><img alt="Soha Mousa, Co-founder of Atannur" decoding="async" loading="lazy" onerror="this.style.display='none';" src="images/soha-mousa.webp"/></div><div class="founder-info"><h3>Soha Mousa</h3><p class="founder-role">Co-founder, Atannur</p><div class="founder-link"><a aria-label="Soha Mousa on LinkedIn" class="social-link founder-link-button" href="https://www.linkedin.com/in/soha-mousa/" rel="noopener noreferrer" target="_blank"><svg aria-hidden="true" viewbox="0 0 24 24">
+<path d="M5.2 3.5A2.2 2.2 0 1 1 5.2 8a2.2 2.2 0 0 1 0-4.5ZM3.4 9.6H7V21H3.4V9.6Zm5.8 0h3.5v1.6h.1c.5-.9 1.7-2 3.6-2 3.8 0 4.5 2.5 4.5 5.8v6h-3.6v-5.3c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V21H9.2V9.6Z"></path>
+</svg><span>Soha Mousa on LinkedIn</span></a></div></div></article></div></div></div></div></section>
 <section aria-label="Atannur and Digital Incubation Center branding" class="brand-strip">
 <div class="brand-inner reveal">
 <p class="brand-kicker">Hosted by Atannur · Incubated at the Digital Incubation Center</p>
